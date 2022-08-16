@@ -21,6 +21,7 @@ builder.Services.AddTransient(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(ItokenService), typeof(TokenService));
 
 
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -31,6 +32,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

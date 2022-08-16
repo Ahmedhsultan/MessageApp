@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20220813123440_addtables")]
-    partial class addtables
+    [Migration("20220815200120_table")]
+    partial class table
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,19 +57,25 @@ namespace Database.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSult")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Password")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SultPassword")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -79,12 +85,17 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Model.Messages", b =>
                 {
                     b.HasOne("Database.Model.Users", "User")
-                        .WithMany()
+                        .WithMany("messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Database.Model.Users", b =>
+                {
+                    b.Navigation("messages");
                 });
 #pragma warning restore 612, 618
         }

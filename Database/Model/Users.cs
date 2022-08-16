@@ -25,5 +25,7 @@ namespace Database.Model
         public DateTime CreatedOn { get; set; }
 
         public string Gender { get; set; }
+
+        public ICollection<Messages> messages { get; set; }
     }
 }

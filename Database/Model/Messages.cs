@@ -16,7 +16,8 @@ namespace Database.Model
         public string Content { get; set; }
 
         public DateTime Created { get; set; }
-
+        
         public Users User { get; set; }
+        public Guid UserId { get; set; }
     }
 }

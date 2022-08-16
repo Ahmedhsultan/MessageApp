@@ -83,12 +83,17 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Model.Messages", b =>
                 {
                     b.HasOne("Database.Model.Users", "User")
-                        .WithMany()
+                        .WithMany("messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Database.Model.Users", b =>
+                {
+                    b.Navigation("messages");
                 });
 #pragma warning restore 612, 618
         }

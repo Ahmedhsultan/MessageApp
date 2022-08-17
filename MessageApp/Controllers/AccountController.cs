@@ -31,8 +31,10 @@ namespace Booking.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<UserClientDTO>> Register(RegisterDTO userDTO)
         {
+            //Check if this userName is used from other user
             if (!await _repository.ExistUserName(userDTO.userName))
             {
+                //Hashing the password befor saving in database
                 using var hmac = new HMACSHA512();
 
                 var user = new Users
@@ -44,6 +46,7 @@ namespace Booking.Controllers
                     CreatedOn = DateTime.Now,
                     Gender = userDTO.Gender
                 };
+                //Add user to databse
                 await _repository.addNewUser(user);
 
                 return Ok(new UserClientDTO()
@@ -58,13 +61,17 @@ namespace Booking.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<UserClientDTO>> Login(LoginDTO loginDTO)
         {
+            //Check if username is right
             if (await _repository.ExistUserName(loginDTO.userName))
             {
+                //Get user from databse
                 Users user = await _repository.GetByUserName(loginDTO.userName);
 
+                //Hash password which enterd by client
                 using var hmac = new HMACSHA512(user.PasswordSult);
                 byte[] loginPasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDTO.Password));
 
+                //Compare between client password and the password wich exist in database
                 for (int i = 0; i < loginPasswordHash.Length; i++)
                     if (loginPasswordHash[i] != user.PasswordHash[i])
                         return Unauthorized("Password is wrong");
